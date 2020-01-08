@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<script type="text/javascript">
+	window.setInterval("mytimes()", 1000);
+
+	function mytimes() {
+		var mytime = new Date();
+		var fen =mytime.getMinutes();
+		if(mytime.getMinutes()<10){
+			fen ="0"+mytime.getMinutes();
+		}
+		$("#times").html(
+				mytime.getFullYear() + "年" + (mytime.getMonth() + 1) + "月"
+						+ mytime.getDate() + "日 " + mytime.getHours() + ":"
+						+ fen + ":" + mytime.getSeconds());
+	}
+</script>
+</head>
+<center>
+	<div id="times" style="font-family: 黑体;font-size: 50px" ></div>
+</center>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>信息管理平台</title>
+<link href="easyui/themes/default/easyui.css" rel="stylesheet">
+<link href="easyui/themes/icon.css" rel="stylesheet">
+<script type="text/javascript" src="easyui/jquery.min.js"></script>
+<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$.post('powerController/getPowerByUid.do',function(json){
+			var jsons = $.parseJSON(json);//把字符串转换成json对象
+			$('#tt').tree({
+				onClick: function(node){
+					if(node.code!=undefined){
+						
+						if($('#mytabs').tabs('exists',node.text)){//是否已经存在
+							//选中
+							$('#mytabs').tabs('select',node.text);
+						}else{
+							$('#mytabs').tabs('add',{    
+							    title:node.text,    
+							    href:node.code,    
+							    closable:true,    
+							    tools:[{    
+							        iconCls:'icon-mini-refresh',    
+							        handler:function(){    
+							        	//刷新列表
+										$('#userList').datagrid('reload');
+							        }    
+							    }]    
+							});
+						}
+						  
+					}
+					
+				},
+				animate : true,
+				data:jsons
+			});
+		})
+		
+		//加载选项卡
+		$('#mytabs').tabs({    
+		    border:false,    
+		    onSelect:function(title){    
+		        
+		    }    
+		});
+		
+		
+		
+		// add a new tab panel    
+		$('#mytabs').tabs('add',{    
+		    title:'&nbsp;首 页&nbsp;', 
+		    href:"NewFile.html",
+		    iconCls:"icon-large-smartart"
+		    /* tools:[{    
+		        iconCls:'icon-mini-refresh',    
+		        handler:function(){    
+		            alert('refresh');    
+		        }    
+		    }]  */   
+		}); 
+		 
+
+		
+
+	})
+</script>
+</head>
+<body class="easyui-layout">
+	<div data-options="region:'north',split:true,border:false"
+		style="height: 100px; background-color: black;">
+		<center>
+			<div
+				style="color: white; font-size: 36px; font-family: 黑体; margin-top: 20px">八维信息管理平台</div>
+		</center>
+	</div>
+	<div data-options="region:'south',title:'合作单位',split:true,border:false"
+		style="height: 100px;">
+		<marquee style="color: red; font-size: 36px">腾讯、阿里巴巴、新浪微博、火狐、谷歌在线、脸书、火山小视频、德云社</marquee>
+	</div>
+	<div data-options="region:'west',title:'平台菜单',split:false,border:true"
+		style="width: 200px;">
+		<div id="aa" class="easyui-accordion"
+			style="width: 300px; height: 200px;" data-options="fit:true">
+			<div title="我的个人信息" data-options="iconCls:'icon-save'"
+				style="overflow: auto; padding: 10px;">
+				<h3 style="color: #0099FF;">Accordion for jQuery</h3>
+				<p>Accordion is a part of easyui framework for jQuery. It lets
+					you define your accordion component on web page more easily.</p>
+			</div>
+			<div title="我的菜单" data-options="iconCls:'icon-reload',selected:true"
+				style="padding: 10px;">
+				<ul id="tt"></ul>
+			</div>
+			<div title="快捷通道">content3</div>
+		</div>
+
+
+
+	</div>
+	<div id="mytabs" data-options="region:'center',border:false"
+		style=" background: #eee;" class="easyui-tabs">
+
+		</div>
+</body>
+</html>

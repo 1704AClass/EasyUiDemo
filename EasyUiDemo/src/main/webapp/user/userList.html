@@ -1,0 +1,149 @@
+<meta charset="UTF-8">
+<script>
+	//添加按钮
+	function winds() {
+		//弹出一个窗口（window）
+		$("#userWin").window({
+			width : 600,
+			height : 400,
+			title : "编辑用户窗口",
+			modal : true,
+			href : "user/userAdd.html",
+			iconCls : "icon-add",
+			tools : [ {
+				iconCls : 'icon-add',
+				handler : function() {
+					alert('add')
+				}
+			}, {
+				iconCls : 'icon-edit',
+				handler : function() {
+					alert('edit')
+				}
+			} ]
+		})
+		//填写数据
+		//调用form ajax 实现添加
+	}
+	//添加按钮
+	function add() {
+		$("#hide_myId").text('');
+		winds();
+	}
+
+	function edit() {
+		var selects = $('#userList').datagrid('getSelections');
+		if (c == 1) {
+			$("#hide_myId").text(selects[0].uid);
+			winds();
+		} else {
+			$.messager.alert('提示', '只能选中一条记录进行编辑', 'error');
+		}
+
+	}
+
+	function deletes() {
+		//获取选中集合
+		var selects = $('#userList').datagrid('getSelections');
+		if (selects.length > 0) {
+			var ids = "";
+			//可以删除
+			$(selects).each(function(i, item) {
+				//alert(i+":"+item.uid);
+				ids += item.uid + ",";
+			})
+			//提示
+			$.messager.confirm('确认对话框', '您想要想删除选中记录吗？', function(r) {
+				if (r) {
+
+					$.post('/userController/deleteUser.do', {
+						ids : ids
+					}, function(data) {
+						//刷新列表
+						$('#userList').datagrid('reload');
+					})
+				}
+			});
+
+		} else {
+			$.messager.alert('提示', '至少选中一条记录进行删除', 'error');
+		}
+
+	}
+
+	$('#userList').datagrid({
+		toolbar : [ {
+			iconCls : 'icon-add',
+			text : "添加",
+			handler : add
+		}, {
+			iconCls : 'icon-edit',
+			text : "编辑",
+			handler : edit
+		}, {
+			iconCls : 'icon-remove',
+			text : "删除",
+			handler : deletes
+		}, '-', {
+			text : "用户名:<input id='seachername'>"
+		}, {
+			text : "手机号:<input id='seacheriphone'>"
+		}, {
+			text : "<a id='btn' href='#'></a>"
+		}, '-', {
+			iconCls : 'icon-help',
+			handler : function() {
+				$.messager.alert('帮助', '请联系管理员，谢谢', 'success');
+			}
+		} ],
+		fitColumns : true,
+		striped : true,
+		pagination : true,
+		rownumbers : true,
+		ctrlSelect : true,
+		pageNumber : 1,
+		pageSize : 10,
+		pageList : [ 10, 22, 33, 44, 55 ],
+		fit : true,
+		url : "/userController/getUserAll.do",
+		columns : [ [ {
+			checkbox : true,
+		}, {
+			field : 'uid',
+			title : 'id',
+			width : 100
+		}, {
+			field : 'name',
+			title : '用户姓名',
+			width : 100
+		}, {
+			field : 'pwd',
+			title : '用户密码',
+			width : 100,
+			align : 'center'
+		}, {
+			field : 'iphone',
+			title : '手机号',
+			width : 100,
+			align : 'center'
+		} ] ]
+	});
+
+	//渲染按钮
+	$('#btn').linkbutton({
+		iconCls : 'icon-search',
+		onClick:function(){
+			//获取两个文本框的数据
+			var name = $("#seachername").val();
+			var iphone = $("#seacheriphone").val();
+			//提交
+			$('#userList').datagrid('load',{
+				name: name,
+				iphone: iphone
+			});
+		}
+	});
+</script>
+<div id="hide_myId" style="display: none"></div>
+<table id="userList"></table>
+<div id="userWin"></div>

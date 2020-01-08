@@ -1,0 +1,69 @@
+<meta charset="UTF-8">
+<script>
+	var url = '';
+	var id = window.parent.$("#hide_myId").text();
+	$.post('/userController/findOne.do', {
+		uid : id
+	}, function(data) {
+		//填充表单
+		$('#userForm').form('load', data);
+
+	})
+	if (id == '') {
+		//添加
+		url = "/userController/addUser.do";
+	} else {
+		url = "/userController/editUser.do";
+	}
+
+	//定义表单
+	$('#userForm').form({
+		url : url,
+		onSubmit : function() {
+			// 这个方法可以在提交表单之前出发  可以用来做表单验证使用！谢谢   
+			// 返回  false 就 终止 提交;    
+		},
+		success : function() {
+			//刷新列表
+			$('#userList').datagrid('reload');
+			//关闭window窗口
+			$("#userWin").window('close');
+
+		}
+	});
+
+	function add() {
+		$('#userForm').submit();
+	}
+</script>
+<hr />
+<center>
+	<form id="userForm" method="post">
+		<input type="hidden" name="uid">
+		<table>
+			<thead>
+				<tr>
+					<th><label for="name">用户名:</label></th>
+					<td><input class="easyui-validatebox" id="name" type="text"
+						name="name" data-options="required:true" /></td>
+				</tr>
+				<tr>
+					<th><label for="pwd">密 码:</label></th>
+					<td><input class="easyui-validatebox" type="text" id="pwd"
+						name="pwd" data-options="required:true" /></td>
+				</tr>
+				<tr>
+					<th>手机号</th>
+					<td><input class="easyui-validatebox" type="text"
+						name="iphone" data-options="required:true" /></td>
+				</tr>
+
+				<tr>
+					<th colspan="2"><a id="btn" href="#" class="easyui-linkbutton"
+						data-options="iconCls:'icon-add'" onClick="add();">保存</a></th>
+				</tr>
+			</thead>
+		</table>
+	</form>
+</center>
+<hr />

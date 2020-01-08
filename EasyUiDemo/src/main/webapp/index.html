@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="easyui/themes/default/easyui.css" rel="stylesheet" >
+<link href="easyui/themes/icon.css" rel="stylesheet">
+<script type="text/javascript" src="easyui/jquery.min.js"></script>
+<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript">
+	//可以写easyui的代码了	
+	$(function(){
+		//正常开发 难不倒了
+		//三种东西的用法   1.属性怎么用  2.方法怎么用  3.事件怎么用
+		
+		
+		/*
+			//属性：
+			$("#id").组件名({
+				属性1：值1,
+				属性2：值2,
+				on某某某：function(){ //事件
+					//要做的事
+				}
+			})
+			//方法 无参数方法
+			$("#id").组件名('refresh');
+			//方法  有参数方法
+			$("#id").组件名('refresh',参数); //类型  值，对象
+			$("#id").组件名('refresh',{
+				width: 600,
+				height: 400
+			});
+		*/
+		
+		//自定义提示按钮
+		$.messager.defaults={ok:"好的",cancel:"失败了"}
+		
+		$('#dd').dialog({    
+		    title: '我的对话框',    
+		    width: 400,    
+		    height: 200,    
+		    collapsible:true,
+		    maximizable:true,
+		    modal: true   
+		});  
+		
+		
+		$.messager.confirm("提示信息","您确定要离开么？",function(r){
+			if(r){
+				//alert的使用
+				$.messager.alert("提示信息","hello easyui","success",function(){
+					$.messager.show({
+						showType:'slide',
+						timeout:5000,
+						msg:'您的上级费用马上要用完啦，系统将在5分钟之后关闭您的电脑。',
+						title:'您的美好提示',
+						style:{
+							right:'',
+							left:0,
+							top:document.body.scrollTop+document.documentElement.scrollTop,
+							bottom:''
+						}
+					});
+					
+				});
+			}else{
+				$.messager.prompt('提示信息', '请输入你的姓名：', function(r){
+					if (r){
+						if(r=='张三'){
+							$.messager.progress({
+								title:"进度条呵呵",
+								msg:"滚犊子",
+								text:"只有张三滚",
+								interval:1000
+							});
+							
+						}
+					}
+				});
+
+
+				
+			}
+			
+		})
+		
+	})
+</script>
+</head>
+<body>
+	<div id="dd">Dialog Content.</div>  
+</body>
+</html>
